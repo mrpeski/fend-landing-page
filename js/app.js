@@ -41,10 +41,18 @@ function createObserver(){
     
 // Add class 'active' to section when near top of viewport
     const handleIntersection = (entries, observer) => entries.forEach(entry => {
+    let target = entry.target;
     if (entry.isIntersecting) {
       entry.target.classList.add('in-viewport');
+      [...document.querySelectorAll('.menu__link')]
+        .filter((item) => item.hash.includes(target.id))
+        .pop().classList.add('active');
+
     } else {
       entry.target.classList.remove('in-viewport');
+       [...document.querySelectorAll('.menu__link')]
+        .filter((item) => item.hash.includes(target.id))
+        .pop().classList.remove('active');
     }
     });
 
