@@ -1,92 +1,50 @@
+let nav = document.querySelector("#navbar__list");
 
-// function createObserver(){
-//     let options = {
-//       root: null,
-//       rootMargin: '0px',
-//       threshold: 0.3
-//     }
-    
-// // Add class 'active' to section when near top of viewport
-//     const handleIntersection = (entries, observer) => entries.forEach(entry => {
-//     let target = entry.target;
-//     if (entry.isIntersecting) {
-//       entry.target.classList.add('active');
-//       // [...document.querySelectorAll('.menu__link')]
-//       //   .filter((item) => item.hash.includes(target.id))
-//       //   .pop().classList.add('active');
+const ACTIVE_CLASS = "active";
 
-//     } else {
-//       entry.target.classList.remove('active');
-//        // [...document.querySelectorAll('.menu__link')]
-//        //  .filter((item) => item.hash.includes(target.id))
-//        //  .pop().classList.remove('active');
-//     }
-//     });
-
-//     let observer = new IntersectionObserver(handleIntersection, options);   
-
-//     let targets = document.querySelectorAll('section');
-
-//     targets.forEach((target) => observer.observe(target));
-// }
-
-
-
-const sections = document.querySelectorAll('section');
-
-function createNewObserver(){
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting){
-                entry.target.classList.add("active")
-                // console.log("Intersecting",entry.target)
-            }
-        })
-        // console.log(entries)
+function observeSections(){
+    const inViewHandler = (entries) => {
+        entries.forEach((entry) => {
+            const {target, isIntersecting} = entry;
+          if (isIntersecting) {
+            target.classList.add(ACTIVE_CLASS);
+            Array.from(document.querySelectorAll(".menu__link"))
+                .filter((item) => item.hash.includes(target.id)).pop().classList.add(ACTIVE_CLASS);
+          } else {
+            entry.target.classList.remove(ACTIVE_CLASS);
+            Array.from(document.querySelectorAll(".menu__link"))
+                .filter((item) => item.hash.includes(target.id)).pop().classList.remove(ACTIVE_CLASS);
+          }
+        });
+      };
+    const observer = new IntersectionObserver(inViewHandler, {
+        threshold: 0.3
     });
-    /// foreach of the sections I want to observe observer.observe(section)
-
-
-    sections.forEach(section => observer.observe(section))
-
+    let targets = document.querySelectorAll("section");
+    targets.forEach((target) => observer.observe(target));
 }
 
-document.onload = createNewObserver();
-
-
-
-// 1.
- let nav = document.querySelector('#navbar__list');
-function buildNav(){
-    let sections = document.querySelectorAll('section');
-
+function buildNav() {
+    let sections = document.querySelectorAll("section");
     let fragment = document.createDocumentFragment();
-
-    sections.forEach((section) => {
-        // 2.
-        let li = document.createElement('li');
-        // 3.
-        li.innerHTML = `<a href=#${section.id} class="menu__link">${section.getAttribute("data-nav")}</a>`;
+    Array.from(sections).forEach((section) => {
+        //  2. Build Nav
+        let li = document.createElement("li");
+        li.innerHTML = `<a href=#${section.id} class="menu__link">${section.dataset["nav"]}</a>`;
+        const anchor = li.querySelector("a");
+        anchor.addEventListener("click", (e) => {
+            e.preventDefault();
+            section.scrollIntoView({ behavior: "smooth" });
+        });
         fragment.appendChild(li);
-      });
-
+    });
     nav.appendChild(fragment);
 }
 
-
-
-function handleScrollTo(e){
-    if(e.target.nodeName === 'A'){
-        e.preventDefault();
-        let id = e.target.href.split("#")[1]; // #section1
-        let section = document.querySelector(`#${id}`);
-        section.scrollIntoView({
-         behavior: 'smooth'
-        });
-    }
-}
-
-
-document.onload = buildNav();
-
-nav.onclick = handleScrollTo;
+document.addEventListener("readystatechange", function main({
+  target: { readyState }
+}) {
+  if (readyState === "complete") {
+    buildNav(); observeSections();
+  }
+});
