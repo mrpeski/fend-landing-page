@@ -1,85 +1,72 @@
- /**
- * 
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and highlights section in viewport upon scrolling.
- * 
- * Dependencies: None
- * 
- * JS Version: ES2015/ES6
- * 
- * JS Standard: ESlint
- * 
-*/
 
-/**
- * Comments should be present at the beginning of each procedure and class.
- * Great to have comments before crucial code sections within the procedure.
-*/
-
-/**
- * Define Global Variables
- * 
-*/
-
-    let nav = document.querySelector('#navbar__list');
-
-
-/**
- * End Global Variables
- * Start Helper Functions
- * 
-*/
-
-function createObserver(){
-    let options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.3
-    }
+// function createObserver(){
+//     let options = {
+//       root: null,
+//       rootMargin: '0px',
+//       threshold: 0.3
+//     }
     
-// Add class 'active' to section when near top of viewport
-    const handleIntersection = (entries, observer) => entries.forEach(entry => {
-    let target = entry.target;
-    if (entry.isIntersecting) {
-      entry.target.classList.add('in-viewport');
-      [...document.querySelectorAll('.menu__link')]
-        .filter((item) => item.hash.includes(target.id))
-        .pop().classList.add('active');
+// // Add class 'active' to section when near top of viewport
+//     const handleIntersection = (entries, observer) => entries.forEach(entry => {
+//     let target = entry.target;
+//     if (entry.isIntersecting) {
+//       entry.target.classList.add('active');
+//       // [...document.querySelectorAll('.menu__link')]
+//       //   .filter((item) => item.hash.includes(target.id))
+//       //   .pop().classList.add('active');
 
-    } else {
-      entry.target.classList.remove('in-viewport');
-       [...document.querySelectorAll('.menu__link')]
-        .filter((item) => item.hash.includes(target.id))
-        .pop().classList.remove('active');
-    }
+//     } else {
+//       entry.target.classList.remove('active');
+//        // [...document.querySelectorAll('.menu__link')]
+//        //  .filter((item) => item.hash.includes(target.id))
+//        //  .pop().classList.remove('active');
+//     }
+//     });
+
+//     let observer = new IntersectionObserver(handleIntersection, options);   
+
+//     let targets = document.querySelectorAll('section');
+
+//     targets.forEach((target) => observer.observe(target));
+// }
+
+
+
+const sections = document.querySelectorAll('section');
+
+function createNewObserver(){
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                entry.target.classList.add("active")
+                // console.log("Intersecting",entry.target)
+            }
+        })
+        // console.log(entries)
     });
+    /// foreach of the sections I want to observe observer.observe(section)
 
-    let observer = new IntersectionObserver(handleIntersection, options);   
 
-    let targets = document.querySelectorAll('section');
+    sections.forEach(section => observer.observe(section))
 
-    targets.forEach((target) => observer.observe(target));
 }
 
+document.onload = createNewObserver();
 
-/**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
 
-// build the nav
 
+// 1.
+ let nav = document.querySelector('#navbar__list');
 function buildNav(){
     let sections = document.querySelectorAll('section');
 
     let fragment = document.createDocumentFragment();
 
-    [...sections].forEach((section) => {
+    sections.forEach((section) => {
+        // 2.
         let li = document.createElement('li');
-        li.innerHTML = `<a href=#${section.id} class="menu__link">${section.dataset['nav']}</a>`;
+        // 3.
+        li.innerHTML = `<a href=#${section.id} class="menu__link">${section.getAttribute("data-nav")}</a>`;
         fragment.appendChild(li);
       });
 
@@ -88,33 +75,18 @@ function buildNav(){
 
 
 
-
-// Scroll to anchor ID using scrollTo event
-
 function handleScrollTo(e){
     if(e.target.nodeName === 'A'){
         e.preventDefault();
-        let id = e.target.href.split('#')[1];
+        let id = e.target.href.split("#")[1]; // #section1
         let section = document.querySelector(`#${id}`);
-        let rect = section.getBoundingClientRect();
-        window.scrollTo({
-            top: document.body.scrollTop + rect.top,
-            behavior: 'smooth'
-        })
+        section.scrollIntoView({
+         behavior: 'smooth'
+        });
     }
 }
 
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
 
-// Build menu 
 document.onload = buildNav();
-document.onload = createObserver();
 
-// Scroll to section on link click
 nav.onclick = handleScrollTo;
-
-
