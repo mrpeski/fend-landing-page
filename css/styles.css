@@ -2,16 +2,18 @@
  *
  * CSS written based on SMACSS architecture.
  * To learn more, visit: http://smacss.com/
- * 
- * For simplicity, no reset or normalize is added. 
+ *
+ * For simplicity, no reset or normalize is added.
  * To learn more, visit: https://css-tricks.com/reboot-resets-reasoning/
  *
 */
 
 
+
 #navbar__list {
 	display: flex;
 	overflow-x: auto;
+	justify-content: space-evenly;
 }
 #navbar__list li {
 	min-width: 30vw
@@ -22,6 +24,10 @@
 	}
 }
 
+.navbar__menu .menu__link.fXmn{
+	background:black;
+	color: white
+}
 
 /* ---- Base Rules ---- */
 body {
@@ -94,6 +100,8 @@ section {
     font-weight: bold;
     text-decoration: none;
     color: #000;
+    text-wrap: no-wrap;
+    white-space: nowrap;
 }
 
 .navbar__menu .menu__link:hover, .navbar__menu .menu__link.active {
@@ -140,7 +148,7 @@ section {
 section:nth-of-type(even) .landing__container {
     margin-right: 0;
     margin-left: auto;
-    text-align: right; 
+    text-align: right;
 }
 
 /* Background Circles */
@@ -207,17 +215,17 @@ section:nth-of-type(3n + 1) .landing__container::after {
 /* ---- Theme State Rules ---- */
 /* Section Active Styles */
 /* Note: your-active-class class is applied through javascript. You should update the class here and in the index.html to what you set in your javascript file.  */
-section.active {
+section.fXmn {
     background: rgb(0, 0, 0);
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
-section.active .landing__container::before {
+section.fXmn .landing__container::before {
     opacity: 1;
     animation: rotate 4s linear 0s infinite forwards;
 }
 
-section.active .landing__container::after {
+section.fXmn .landing__container::after {
     opacity: 1;
     animation: rotate 5s linear 0s infinite forwards reverse;
 }
@@ -231,7 +239,7 @@ section.active .landing__container::after {
 	}
 	to {
 		transform: rotate(360deg)
-		           translate(-1em) 
+		           translate(-1em)
 		           rotate(-360deg);
 	}
 }
