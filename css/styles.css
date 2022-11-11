@@ -12,15 +12,16 @@
 
 #navbar__list {
 	display: flex;
-	overflow-x: auto;
+	flex-wrap: wrap;
 	justify-content: space-evenly;
 }
+
 #navbar__list li {
 	min-width: 30vw
 }
 @media (min-width: 450px){
 	#navbar__list li {
-		min-width: auto
+		min-width: auto;
 	}
 }
 
@@ -33,9 +34,15 @@
 body {
     background: rgb(136,203,171);
     background: linear-gradient(0deg, rgba(136,203,171,1) 0%, rgba(0,13,60,1) 100%);
-    margin: 0;
+	margin: 0;
+	margin-top: 190px;
     font-family: 'Merriweather', serif;
     color: #fff;
+}
+@media screen and (min-width: 450px){
+	body {
+		margin-top: 0;
+	}
 }
 
 
