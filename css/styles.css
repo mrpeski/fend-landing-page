@@ -107,11 +107,9 @@ section {
     font-weight: bold;
     text-decoration: none;
     color: #000;
-    text-wrap: no-wrap;
     white-space: nowrap;
 }
-
-.navbar__menu .menu__link:hover, .navbar__menu .menu__link.active {
+ .navbar__menu .menu__link.fXmn {
     background: #333;
     color: #fff;
     transition: ease 0.3s all;
